@@ -1,0 +1,72 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteNav from '../components/SiteNav.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { Image } from 'astro:assets';
+import resumePage from '../media/resume.png';
+
+const pdf = '/media/resume.pdf';
+---
+
+<Layout
+  title="Résumé — Matthew Brownrigg"
+  description="Curriculum vitae of Matthew Brownrigg — ML Engineer & NLP Researcher. Read inline or download the PDF."
+>
+  <SiteNav current="resume" />
+
+  <main class="resume-page">
+    <header class="resume-head">
+      <a href="/" class="case-back">← Home</a>
+      <p class="resume-kicker">Curriculum Vitae · Spring 2026</p>
+      <h1 class="resume-title">Résumé</h1>
+      <p class="resume-lede">
+        A current snapshot of research, engineering, and education. Read it inline
+        below, or take the PDF with you.
+      </p>
+
+      <div class="resume-actions">
+        <a class="resume-cta" href={pdf} download="Matthew_Brownrigg_Resume.pdf">
+          Download PDF
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true">
+            <path d="M6.5 1v8m0 0L3.5 6m3 3l3-3M1.5 11.5h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <a class="resume-ghost" href={pdf} target="_blank" rel="noopener">
+          Open in new tab
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+            <path d="M4.5 2h-3v8.5h8.5v-3M7 1.5h3.5V5M10 2L5.5 6.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </header>
+
+    <figure class="resume-doc">
+      <div class="resume-sheet">
+        <Image
+          src={resumePage}
+          alt="Résumé of Matthew Brownrigg — ML Engineer & NLP Researcher. Education, experience, skills, and publications. Download the PDF for the full text."
+          class="resume-sheet-img"
+          widths={[640, 1040, 1600, 2009]}
+          sizes="(max-width: 720px) 92vw, 50rem"
+          loading="eager"
+        />
+        <svg
+          class="plate-corners"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+        >
+          <path d="M2 14 L2 2 L14 2" />
+          <path d="M86 2 L98 2 L98 14" />
+          <path d="M2 86 L2 98 L14 98" />
+          <path d="M86 98 L98 98 L98 86" />
+        </svg>
+      </div>
+      <figcaption class="resume-cap">
+        Page rendering · for the selectable, full-resolution document, use Download PDF above.
+      </figcaption>
+    </figure>
+  </main>
+
+  <SiteFooter />
+</Layout>

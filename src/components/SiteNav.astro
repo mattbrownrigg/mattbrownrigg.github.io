@@ -1,7 +1,7 @@
 ---
 /* Fixed top navigation, shared across all pages. */
 interface Props {
-  current?: 'work' | 'about' | 'contact';
+  current?: 'work' | 'resume' | 'about' | 'contact';
 }
 const { current } = Astro.props;
 ---
@@ -12,6 +12,7 @@ const { current } = Astro.props;
   </a>
   <nav class="nav-links" aria-label="Site navigation">
     <a href="/work" aria-current={current === 'work' ? 'page' : undefined}>Work</a>
+    <a href="/resume" aria-current={current === 'resume' ? 'page' : undefined}>Resume</a>
     <a href="/#about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
     <a href="/#contact" aria-current={current === 'contact' ? 'page' : undefined}>Contact</a>
   </nav>
