@@ -1,0 +1,18 @@
+---
+/* Fixed top navigation, shared across all pages. */
+interface Props {
+  current?: 'work' | 'about' | 'contact';
+}
+const { current } = Astro.props;
+---
+
+<header class="site-nav">
+  <a href="/" class="wordmark" aria-label="Matthew Brownrigg — home">
+    Matthew Brownrigg
+  </a>
+  <nav class="nav-links" aria-label="Site navigation">
+    <a href="/work" aria-current={current === 'work' ? 'page' : undefined}>Work</a>
+    <a href="/#about" aria-current={current === 'about' ? 'page' : undefined}>About</a>
+    <a href="/#contact" aria-current={current === 'contact' ? 'page' : undefined}>Contact</a>
+  </nav>
+</header>

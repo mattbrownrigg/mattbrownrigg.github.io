@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import SiteNav from '../../components/SiteNav.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import Plate from '../../components/Plate.astro';
+
+const projects = (await getCollection('projects')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+---
+
+<Layout
+  title="Work — Matthew Brownrigg"
+  description="Selected projects in NLP research, recommender systems, and data engineering."
+>
+  <SiteNav current="work" />
+
+  <main class="work-page">
+    <header class="work-page-head">
+      <a href="/" class="case-back">← Home</a>
+      <p class="work-page-kicker">{projects.length} projects</p>
+      <h1 class="work-page-title">Work</h1>
+      <p class="work-page-lede">
+        Research and systems, across separate disciplines. Each project opens to
+        a short case study.
+      </p>
+    </header>
+
+    <ol class="gallery" role="list">
+      {
+        projects.map((p) => {
+          const num = String(p.data.order).padStart(2, '0');
+          return (
+            <li class="gallery-item">
+              <a class="gallery-link" href={`/work/${p.id}`}>
+                <div class="gallery-thumb">
+                  <Plate
+                    caption={`${p.data.title} — preview`}
+                    src={p.data.cover}
+                    index={p.data.order - 1}
+                    showCaption={false}
+                  />
+                </div>
+                <div class="gallery-meta">
+                  <span class="gallery-num">#{num}</span>
+                  <h2 class="gallery-title">{p.data.shortTitle ?? p.data.title}</h2>
+                  <p class="gallery-blurb">{p.data.blurb}</p>
+                  <span class="gallery-tags">
+                    <span class="gallery-cat">{p.data.category}</span>
+                    <span class="gallery-year">{p.data.year}</span>
+                  </span>
+                </div>
+              </a>
+            </li>
+          );
+        })
+      }
+    </ol>
+  </main>
+
+  <SiteFooter />
+</Layout>

@@ -1,0 +1,72 @@
+---
+/* ──────────────────────────────────────────────────────────────
+   CONTOURS — topographic line motif (the Daliwali signature)
+   Nested organic closed curves, generated at build time. Purely
+   decorative; colour comes from `currentColor`, size from CSS.
+   ────────────────────────────────────────────────────────────── */
+interface Props {
+  class?: string;
+  cx?: number;
+  cy?: number;
+  baseR?: number;
+  rings?: number;
+  gap?: number;
+}
+
+const {
+  class: className = '',
+  cx = 200,
+  cy = 200,
+  baseR = 30,
+  rings = 7,
+  gap = 26,
+} = Astro.props;
+
+const SIZE = 400;
+const POINTS = 56;
+type P = [number, number];
+const mid = (p: P, q: P): P => [(p[0] + q[0]) / 2, (p[1] + q[1]) / 2];
+
+function ringPath(radius: number, phase: number, amp: number): string {
+  const pts: P[] = [];
+  for (let i = 0; i < POINTS; i++) {
+    const a = (i / POINTS) * Math.PI * 2;
+    const r =
+      radius +
+      amp * Math.sin(3 * a + phase) +
+      amp * 0.5 * Math.sin(5 * a + phase * 1.7);
+    pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+  }
+  const start = mid(pts[POINTS - 1], pts[0]);
+  let d = `M ${start[0].toFixed(2)} ${start[1].toFixed(2)} `;
+  for (let i = 0; i < POINTS; i++) {
+    const curr = pts[i];
+    const m = mid(curr, pts[(i + 1) % POINTS]);
+    d += `Q ${curr[0].toFixed(2)} ${curr[1].toFixed(2)} ${m[0].toFixed(2)} ${m[1].toFixed(2)} `;
+  }
+  return d + 'Z';
+}
+
+const paths = Array.from({ length: rings }, (_, i) =>
+  ringPath(baseR + i * gap, i * 0.9, 3 + i * 0.85),
+);
+---
+
+<svg
+  class={`contours ${className}`}
+  viewBox={`0 0 ${SIZE} ${SIZE}`}
+  fill="none"
+  aria-hidden="true"
+  focusable="false"
+>
+  {
+    paths.map((d, i) => (
+      <path
+        d={d}
+        stroke="currentColor"
+        stroke-width={0.7}
+        opacity={(0.32 - i * 0.03).toFixed(3)}
+      />
+    ))
+  }
+</svg>

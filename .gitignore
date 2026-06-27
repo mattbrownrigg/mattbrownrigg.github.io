@@ -10,3 +10,5 @@ npm-debug.log*
 !.github/
 *.md
 !README.md
+# Content-collection sources must be tracked for the site to build
+!src/content/**/*.md

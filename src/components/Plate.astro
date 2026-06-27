@@ -1,0 +1,62 @@
+---
+/* ──────────────────────────────────────────────────────────────
+   PLATE — a framed project figure.
+   With `src`: renders the optimized screenshot.
+   Without `src`: renders an on-brand placeholder plate (a designed
+   frame awaiting a capture), never a broken-image box.
+   ────────────────────────────────────────────────────────────── */
+import { Image } from 'astro:assets';
+import Contours from './Contours.astro';
+
+interface Props {
+  caption: string;
+  src?: import('astro').ImageMetadata;
+  index?: number;
+  eager?: boolean;
+  /** Hide the visible figcaption (alt text is still set from `caption`). */
+  showCaption?: boolean;
+}
+
+const {
+  caption,
+  src,
+  index = 0,
+  eager = false,
+  showCaption = true,
+} = Astro.props;
+const fig = String(index + 1).padStart(2, '0');
+---
+
+<figure class="plate">
+  <div class="plate-frame">
+    {
+      src ? (
+        <Image
+          src={src}
+          alt={caption}
+          class="plate-img"
+          widths={[480, 800, 1200]}
+          sizes="(max-width: 720px) 92vw, 640px"
+          loading={eager ? 'eager' : 'lazy'}
+        />
+      ) : (
+        <div class="plate-empty">
+          <Contours class="plate-contours" rings={6} baseR={26} gap={24} />
+          <span class="plate-fig">Fig.&nbsp;{fig}</span>
+        </div>
+      )
+    }
+    <svg
+      class="plate-corners"
+      viewBox="0 0 100 100"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+    >
+      <path d="M2 14 L2 2 L14 2" />
+      <path d="M86 2 L98 2 L98 14" />
+      <path d="M2 86 L2 98 L14 98" />
+      <path d="M86 98 L98 98 L98 86" />
+    </svg>
+  </div>
+  {showCaption && <figcaption class="plate-cap">{caption}</figcaption>}
+</figure>
