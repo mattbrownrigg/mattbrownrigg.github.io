@@ -6,7 +6,7 @@ interface Props {
   description?: string;
 }
 
-const { title, description = 'Matthew Brownrigg — Designer & Engineer' } = Astro.props;
+const { title, description = 'Matthew Brownrigg — ML Engineer & NLP Researcher at Johns Hopkins, working on LLM inference-time reasoning.' } = Astro.props;
 ---
 
 <!doctype html>
@@ -18,6 +18,25 @@ const { title, description = 'Matthew Brownrigg — Designer & Engineer' } = Ast
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Structured data: Person -->
+    <script
+      type="application/ld+json"
+      is:inline
+      set:html={JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': 'Person',
+        name: 'Matthew Brownrigg',
+        url: 'https://matthewbrownrigg.com',
+        jobTitle: 'ML Engineer & NLP Researcher',
+        affiliation: 'Johns Hopkins University',
+        sameAs: [
+          'https://github.com/mattbrownrigg',
+          'https://www.linkedin.com/in/matthewbrownrigg/',
+          'https://x.com/matt_brownrigg_',
+        ],
+      })}
+    />
 
     <!-- Fonts: same triad as Neo Mirai reference -->
     <!-- Chakra Petch (geometric display) · Zen Old Mincho (editorial serif body) · Azeret Mono (labels/metadata) -->
