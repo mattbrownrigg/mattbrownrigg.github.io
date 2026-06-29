@@ -29,7 +29,11 @@ const { title, description = 'Matthew Brownrigg — ML Engineer & NLP Researcher
         name: 'Matthew Brownrigg',
         url: 'https://matthewbrownrigg.com',
         jobTitle: 'ML Engineer & NLP Researcher',
-        affiliation: 'Johns Hopkins University',
+        affiliation: {
+          '@type': 'Organization',
+          name: 'Johns Hopkins University',
+          url: 'https://www.jhu.edu',
+        },
         sameAs: [
           'https://github.com/mattbrownrigg',
           'https://www.linkedin.com/in/matthewbrownrigg/',
