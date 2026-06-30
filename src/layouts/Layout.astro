@@ -16,6 +16,17 @@ const { title, description = 'Matthew Brownrigg — ML Engineer & NLP Researcher
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Open Graph / Twitter (also feeds Google's thumbnail candidates) -->
+    <meta property="og:type" content="profile" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://matthewbrownrigg.com" />
+    <meta property="og:image" content="https://matthewbrownrigg.com/media/matthew_brownrigg.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://matthewbrownrigg.com/media/matthew_brownrigg.jpg" />
     <title>{title}</title>
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -31,6 +42,7 @@ const { title, description = 'Matthew Brownrigg — ML Engineer & NLP Researcher
         '@type': 'Person',
         name: 'Matthew Brownrigg',
         url: 'https://matthewbrownrigg.com',
+        image: 'https://matthewbrownrigg.com/media/matthew_brownrigg.jpg',
         jobTitle: 'ML Engineer & NLP Researcher',
         affiliation: {
           '@type': 'Organization',
