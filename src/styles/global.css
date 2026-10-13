@@ -198,6 +198,54 @@ ol, ul { list-style: none; }
   pointer-events: none;
 }
 
+/* Portrait medallion: ticked gold ring + diamond drop, echoing the halo.
+   Sized off the viewport so it fills the space above the name on
+   desktop without pushing the copy past the fold on short screens. */
+.hero-portrait {
+  --size: clamp(64px, min(13vw, 100svh - 640px), 200px);
+  position: relative;
+  flex: none;
+  align-self: flex-start;
+  width: var(--size);
+  height: var(--size);
+  margin: 0 0 clamp(1.75rem, min(4vw, 100svh - 640px), 3.25rem) calc(var(--size) * 0.11);
+  animation: rise-in 600ms var(--ease-out-expo) both;
+}
+
+.hero-portrait::before {
+  content: '';
+  position: absolute;
+  inset: -11%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(var(--color-accent) 0 1.6deg, transparent 1.6deg 7.5deg);
+  -webkit-mask: radial-gradient(closest-side, transparent 90%, #000 91%, #000 99%, transparent 100%);
+          mask: radial-gradient(closest-side, transparent 90%, #000 91%, #000 99%, transparent 100%);
+  animation: deco-turn 120s linear infinite;
+}
+
+.hero-portrait::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: calc(111% + 4px);
+  width: clamp(9px, 6%, 12px);
+  aspect-ratio: 2 / 3;
+  translate: -50% 0;
+  background: var(--color-accent);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
+.hero-portrait-img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center 20%;
+  outline: 1.5px solid var(--color-accent);
+  outline-offset: 4px;
+}
+
 .hero-name {
   font-family: var(--font-display);
   font-weight: 300;
@@ -688,6 +736,8 @@ ol, ul { list-style: none; }
     padding-right: var(--page-pad);
     min-height: 100svh;
   }
+
+  .hero-portrait { --size: clamp(72px, 100svh - 540px, 104px); }
 
   .hero-text::before {
     background: linear-gradient(

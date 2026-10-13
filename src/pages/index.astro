@@ -25,6 +25,15 @@ const projects = (await getCollection('projects')).sort(
 
   <section class="hero" aria-label="Introduction">
       <div class="hero-text">
+        <div class="hero-portrait">
+          <Image
+            src={headshot}
+            alt="Matthew Brownrigg"
+            class="hero-portrait-img"
+            width={400}
+            loading="eager"
+          />
+        </div>
         <h1 class="hero-name">
           <span>Matthew</span>
           <span>Brownrigg</span>
