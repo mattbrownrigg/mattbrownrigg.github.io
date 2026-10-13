@@ -68,10 +68,6 @@ function zigzag(x0: number, x1: number, y: number, amp: number, period: number) 
 const diamond = (cx: number, cy: number, rx: number, ry: number) =>
   `${cx},${cy - ry} ${cx + rx},${cy} ${cx},${cy + ry} ${cx - rx},${cy}`;
 
-/** Small rotating group. The invisible circle pins its bounding box so it spins about (cx, cy). */
-const spin = (cls: string, cx: number, cy: number, r: number, inner: string) =>
-  `<g class="${cls}"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none"/>${inner}</g>`;
-
 const pct = (n: number, of: number) => `${f((n / of) * 100)}%`;
 
 /** Full-stage layer. */
@@ -213,7 +209,7 @@ function lanternTower(cx: number, top: number, w: number) {
   s += `<polygon points="${oct(R)}" fill="${INK}"/>`;
   s += `<polygon points="${oct(R - 6)}" fill="none" stroke="${GOLD}" stroke-width="0.9" opacity="0.7"/>`;
   s += `<circle cx="${cx}" cy="${ly}" r="${R * 0.42}" fill="${GOLD}" opacity="0.75"/>`;
-  s += spin('deco-spin', cx, ly, R - 8, rayLines(cx, ly, R * 0.42, R - 8, 16, 0, 360, `stroke="${GOLD}" stroke-width="0.8" opacity="0.65"`));
+  s += rayLines(cx, ly, R * 0.42, R - 8, 16, 0, 360, `stroke="${GOLD}" stroke-width="0.8" opacity="0.65"`);
   const sy = ly + R - 4;
   s += `<rect x="${cx - w / 2 + 6}" y="${sy}" width="${w - 12}" height="${H - sy}" fill="${INK}"/>`;
   s += `<rect x="${cx - w / 2 - 6}" y="${sy + 60}" width="${w + 12}" height="${H - sy - 60}" fill="${INK}"/>`;
