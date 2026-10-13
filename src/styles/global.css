@@ -327,6 +327,48 @@ ol, ul { list-style: none; }
   .hero-visual * { animation: none !important; }
 }
 
+/* Scroll cue — thin chevron that bobs gently and fades as you scroll */
+.hero-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1rem, 3vh, 2rem);
+  z-index: 2;
+  translate: -50% 0;
+  padding: var(--sp-3);
+  color: var(--color-ink);
+  opacity: 0.7;
+  transition: color 200ms var(--ease-out-expo);
+}
+
+.hero-scroll:hover { color: var(--color-accent-deep); }
+
+.hero-scroll svg {
+  animation: rise-in 600ms var(--ease-out-expo) 900ms both,
+             chevron-bob 2.4s ease-in-out 1.5s infinite;
+}
+
+@supports (animation-timeline: scroll()) {
+  .hero-scroll {
+    animation: fade-away linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 25vh;
+  }
+}
+
+/* Sections ease up into place as they scroll into view */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .work-heading,
+    .work-item,
+    .about-content,
+    .about-portrait-wrap {
+      animation: scroll-reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 30%;
+    }
+  }
+}
+
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    SECTION SHELL
@@ -553,6 +595,21 @@ ol, ul { list-style: none; }
 @keyframes rise-in {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes chevron-bob {
+  0%, 100% { translate: 0 0; }
+  50%      { translate: 0 6px; }
+}
+
+@keyframes fade-away {
+  from { opacity: 0.7; }
+  to   { opacity: 0; visibility: hidden; }
+}
+
+@keyframes scroll-reveal {
+  from { opacity: 0; translate: 0 2.5rem; }
+  to   { opacity: 1; translate: 0 0; }
 }
 
 @keyframes rule-extend {
