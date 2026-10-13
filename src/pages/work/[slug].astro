@@ -35,7 +35,7 @@ const hasLink = Boolean(data.link && data.link.href !== '#');
   <SiteNav current="work" />
 
   <main class="case">
-    <a href="/work" class="case-back">← Work</a>
+    <a href="/work/" class="case-back">← Work</a>
 
     <header class="case-head">
       <Contours class="case-contours" rings={8} baseR={28} gap={28} />
@@ -126,7 +126,7 @@ const hasLink = Boolean(data.link && data.link.href !== '#');
     <nav class="case-pager" aria-label="More projects">
       {
         prev ? (
-          <a href={`/work/${prev.id}`} class="case-pager-link case-pager-prev">
+          <a href={`/work/${prev.id}/`} class="case-pager-link case-pager-prev">
             <span class="case-pager-dir">← Prev</span>
             <span class="case-pager-name">{prev.data.shortTitle ?? prev.data.title}</span>
           </a>
@@ -136,7 +136,7 @@ const hasLink = Boolean(data.link && data.link.href !== '#');
       }
       {
         next ? (
-          <a href={`/work/${next.id}`} class="case-pager-link case-pager-next">
+          <a href={`/work/${next.id}/`} class="case-pager-link case-pager-next">
             <span class="case-pager-dir">Next →</span>
             <span class="case-pager-name">{next.data.shortTitle ?? next.data.title}</span>
           </a>

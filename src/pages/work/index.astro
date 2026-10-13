@@ -33,7 +33,7 @@ const projects = (await getCollection('projects')).sort(
           const num = String(p.data.order).padStart(2, '0');
           return (
             <li class="gallery-item">
-              <a class="gallery-link" href={`/work/${p.id}`}>
+              <a class="gallery-link" href={`/work/${p.id}/`}>
                 <div class="gallery-thumb">
                   <Plate
                     caption={`${p.data.title} — preview`}
