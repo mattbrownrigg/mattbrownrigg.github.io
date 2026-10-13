@@ -220,7 +220,6 @@ ol, ul { list-style: none; }
   background: repeating-conic-gradient(var(--color-accent) 0 1.6deg, transparent 1.6deg 7.5deg);
   -webkit-mask: radial-gradient(closest-side, transparent 90%, #000 91%, #000 99%, transparent 100%);
           mask: radial-gradient(closest-side, transparent 90%, #000 91%, #000 99%, transparent 100%);
-  animation: deco-turn 120s linear infinite;
 }
 
 .hero-portrait::after {
@@ -241,7 +240,6 @@ ol, ul { list-style: none; }
   max-width: none;
   border-radius: 50%;
   object-fit: cover;
-  object-position: center 20%;
   outline: 1.5px solid var(--color-accent);
   outline-offset: 4px;
 }
@@ -401,7 +399,7 @@ ol, ul { list-style: none; }
   .hero-visual * { animation: none !important; }
 }
 
-/* Scroll cue — thin chevron that bobs gently and fades as you scroll */
+/* Scroll cue — thin chevron that fades as you scroll */
 .hero-scroll {
   position: absolute;
   left: 50%;
@@ -417,8 +415,7 @@ ol, ul { list-style: none; }
 .hero-scroll:hover { color: var(--color-accent-deep); }
 
 .hero-scroll svg {
-  animation: rise-in 600ms var(--ease-out-expo) 900ms both,
-             chevron-bob 2.4s ease-in-out 1.5s infinite;
+  animation: rise-in 600ms var(--ease-out-expo) 900ms both;
 }
 
 @supports (animation-timeline: scroll()) {
@@ -683,11 +680,6 @@ ol, ul { list-style: none; }
 
 @keyframes cursor-blink {
   50% { opacity: 0; }
-}
-
-@keyframes chevron-bob {
-  0%, 100% { translate: 0 0; }
-  50%      { translate: 0 6px; }
 }
 
 @keyframes fade-away {

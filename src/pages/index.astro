@@ -6,6 +6,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 import DecoSkyline from '../components/DecoSkyline.astro';
 import { Image } from 'astro:assets';
 import headshot from '../media/matthew_brownrigg.jpg';
+import heroHeadshot from '../media/headshot_hero.webp';
 
 const projects = (await getCollection('projects')).sort(
   (a, b) => a.data.order - b.data.order,
@@ -27,7 +28,7 @@ const projects = (await getCollection('projects')).sort(
       <div class="hero-text">
         <div class="hero-portrait">
           <Image
-            src={headshot}
+            src={heroHeadshot}
             alt="Matthew Brownrigg"
             class="hero-portrait-img"
             width={400}
