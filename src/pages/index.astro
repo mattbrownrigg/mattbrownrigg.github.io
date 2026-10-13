@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
 import SiteNav from '../components/SiteNav.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import DecoSkyline from '../components/DecoSkyline.astro';
 import { Image } from 'astro:assets';
 import headshot from '../media/matthew_brownrigg.jpg';
 
@@ -39,91 +40,7 @@ const projects = (await getCollection('projects')).sort(
         </a>
       </div>
       <div class="hero-visual" aria-hidden="true">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice">
-          <rect width="600" height="800" fill="#ead7b5"/>
-          <g stroke="#1e1608" stroke-width="0.4" opacity="0.05">
-            <line x1="0" y1="80"  x2="600" y2="80"/><line x1="0" y1="130" x2="600" y2="130"/>
-            <line x1="0" y1="180" x2="600" y2="180"/><line x1="0" y1="230" x2="600" y2="230"/>
-            <line x1="0" y1="280" x2="600" y2="280"/><line x1="0" y1="330" x2="600" y2="330"/>
-            <line x1="0" y1="380" x2="600" y2="380"/><line x1="0" y1="430" x2="600" y2="430"/>
-            <line x1="0" y1="480" x2="600" y2="480"/><line x1="0" y1="530" x2="600" y2="530"/>
-            <line x1="0" y1="580" x2="600" y2="580"/><line x1="0" y1="630" x2="600" y2="630"/>
-          </g>
-          <g stroke="#cc8800" stroke-width="0.6" opacity="0.18">
-            <line x1="400" y1="250" x2="650"  y2="0"/>  <line x1="400" y1="250" x2="650"  y2="250"/>
-            <line x1="400" y1="250" x2="650"  y2="500"/><line x1="400" y1="250" x2="400"  y2="0"/>
-            <line x1="400" y1="250" x2="150"  y2="0"/>  <line x1="400" y1="250" x2="150"  y2="250"/>
-            <line x1="400" y1="250" x2="150"  y2="500"/><line x1="400" y1="250" x2="400"  y2="500"/>
-            <line x1="400" y1="250" x2="575"  y2="75"/> <line x1="400" y1="250" x2="575"  y2="425"/>
-            <line x1="400" y1="250" x2="225"  y2="75"/> <line x1="400" y1="250" x2="225"  y2="425"/>
-            <line x1="400" y1="250" x2="525"  y2="0"/>  <line x1="400" y1="250" x2="525"  y2="500"/>
-            <line x1="400" y1="250" x2="275"  y2="0"/>  <line x1="400" y1="250" x2="275"  y2="500"/>
-          </g>
-          <circle cx="400" cy="250" r="230" fill="#cc8800" opacity="0.035"/>
-          <circle cx="400" cy="250" r="190" fill="#cc8800" opacity="0.050"/>
-          <circle cx="400" cy="250" r="152" fill="#cc8800" opacity="0.075"/>
-          <circle cx="400" cy="250" r="116" fill="#cc8800" opacity="0.115"/>
-          <circle cx="400" cy="250" r="82"  fill="#cc8800" opacity="0.190"/>
-          <circle cx="400" cy="250" r="52"  fill="#cc8800" opacity="0.340"/>
-          <circle cx="400" cy="250" r="28"  fill="#cc8800" opacity="0.620"/>
-          <circle cx="400" cy="250" r="10"  fill="#cc8800" opacity="0.900"/>
-          <circle cx="400" cy="250" r="190" fill="none" stroke="#cc8800" stroke-width="0.8" opacity="0.22"/>
-          <circle cx="400" cy="250" r="152" fill="none" stroke="#cc8800" stroke-width="0.6" opacity="0.18"/>
-          <circle cx="400" cy="250" r="116" fill="none" stroke="#cc8800" stroke-width="0.5" opacity="0.14"/>
-          <circle cx="400" cy="250" r="82"  fill="none" stroke="#cc8800" stroke-width="0.4" opacity="0.10"/>
-          <g fill="#1e1608" opacity="0.80">
-            <rect x="224" y="400" width="56"  height="400"/>
-            <rect x="200" y="363" width="104" height="42"/>
-            <rect x="182" y="328" width="140" height="40"/>
-            <rect x="208" y="296" width="88"  height="36"/>
-            <rect x="228" y="264" width="48"  height="36"/>
-            <rect x="238" y="232" width="28"  height="36"/>
-            <polygon points="252,170 239,234 265,234"/>
-          </g>
-          <g fill="#1e1608" opacity="0.62">
-            <rect x="388" y="500" width="44"  height="300"/>
-            <rect x="369" y="466" width="82"  height="38"/>
-            <rect x="352" y="436" width="116" height="36"/>
-            <rect x="375" y="406" width="70"  height="34"/>
-            <polygon points="412,362 396,408 428,408"/>
-          </g>
-          <g fill="#1e1608" opacity="0.46">
-            <rect x="510" y="568" width="36"  height="232"/>
-            <rect x="494" y="542" width="68"  height="30"/>
-            <rect x="486" y="519" width="84"  height="27"/>
-            <rect x="522" y="498" width="12"  height="25"/>
-            <rect x="526" y="480" width="4"   height="22"/>
-          </g>
-          <g fill="#1e1608" opacity="0.30">
-            <rect x="78"  y="620" width="28"  height="180"/>
-            <rect x="64"  y="600" width="56"  height="24"/>
-            <rect x="55"  y="582" width="74"  height="22"/>
-            <polygon points="92,558 80,584 104,584"/>
-          </g>
-          <g stroke="#1e1608" opacity="0.10">
-            <line x1="0" y1="540" x2="600" y2="540" stroke-width="0.9"/>
-            <line x1="0" y1="546" x2="600" y2="546" stroke-width="0.5"/>
-            <line x1="0" y1="550" x2="600" y2="550" stroke-width="0.3"/>
-            <line x1="0" y1="553" x2="600" y2="553" stroke-width="0.2"/>
-          </g>
-          <rect x="18" y="18" width="564" height="764" fill="none" stroke="#cc8800" stroke-width="0.8" opacity="0.28"/>
-          <rect x="27" y="27" width="546" height="746" fill="none" stroke="#cc8800" stroke-width="0.35" opacity="0.16"/>
-          <g stroke="#cc8800" stroke-width="1.6" stroke-linecap="square" opacity="0.42" fill="none">
-            <polyline points="18,58  18,18  58,18"/>
-            <polyline points="542,18 582,18 582,58"/>
-            <polyline points="18,742  18,782  58,782"/>
-            <polyline points="542,782 582,782 582,742"/>
-          </g>
-          <polygon points="300,756 310,766 300,776 290,766" fill="none" stroke="#cc8800" stroke-width="1" opacity="0.38"/>
-          <polygon points="300,760 307,767 300,774 293,767" fill="#cc8800" opacity="0.18"/>
-          <defs>
-            <linearGradient id="vignette" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0.55" stop-color="#ead7b5" stop-opacity="0"/>
-              <stop offset="1"    stop-color="#ead7b5" stop-opacity="0.45"/>
-            </linearGradient>
-          </defs>
-          <rect width="600" height="800" fill="url(#vignette)"/>
-        </svg>
+        <DecoSkyline />
       </div>
   </section>
 

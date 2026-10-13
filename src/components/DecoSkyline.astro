@@ -1,0 +1,282 @@
+---
+/* ──────────────────────────────────────────────────────────────
+   DECO SKYLINE — hero backdrop.
+   A Chrysler-style crown before a geometric halo and sunburst,
+   flanked by a fan-crowned tower and an octagon-lantern tower.
+   Generated at build time; the `deco-*` classes are animated in
+   global.css (slow rotation, crown lights, spire glint).
+
+   Everything that rotates is its own <svg> layer so the browser can
+   turn it on the compositor; rotating groups inside one full-bleed
+   SVG would repaint the whole scene every frame.
+   ────────────────────────────────────────────────────────────── */
+
+const W = 1440;
+const H = 900;
+const INK = '#1e1608';
+const GOLD = '#cc8800';
+const PAPER = '#ead7b5';
+
+// Composition anchors (viewBox units). Mobile CSS centres on TOWER_X.
+const TOWER_X = 940;
+const HALO = { x: 940, y: 360, r: 250 };
+const LANTERN_X = 1250;
+const FAN_X = 690;
+
+type P = [number, number];
+const f = (n: number) => +n.toFixed(2);
+const rad = (d: number) => (d * Math.PI) / 180;
+const pt = (cx: number, cy: number, r: number, a: number): P => [
+  f(cx + r * Math.cos(rad(a))),
+  f(cy + r * Math.sin(rad(a))),
+];
+const pts = (list: P[]) => list.map((p) => p.join(',')).join(' ');
+
+/** Alternate wedges radiating from (cx, cy) between angles a0..a1 (0° = east). */
+function rays(cx: number, cy: number, r0: number, r1: number, n: number, a0: number, a1: number, attrs: string) {
+  const step = (a1 - a0) / n;
+  let s = '';
+  for (let i = 0; i < n; i += 2) {
+    const a = a0 + i * step;
+    const b = a + step;
+    s += `<polygon points="${pts([pt(cx, cy, r0, a), pt(cx, cy, r1, a), pt(cx, cy, r1, b), pt(cx, cy, r0, b)])}" ${attrs}/>`;
+  }
+  return s;
+}
+
+function rayLines(cx: number, cy: number, r0: number, r1: number, n: number, a0: number, a1: number, attrs: string) {
+  let s = '';
+  for (let i = 0; i <= n; i++) {
+    const a = a0 + ((a1 - a0) * i) / n;
+    const [x0, y0] = pt(cx, cy, r0, a);
+    const [x1, y1] = pt(cx, cy, r1, a);
+    s += `<line x1="${x0}" y1="${y0}" x2="${x1}" y2="${y1}" ${attrs}/>`;
+  }
+  return s;
+}
+
+/** Upper semicircle arc. */
+const semi = (cx: number, cy: number, r: number) => `M${f(cx - r)} ${cy} A${r} ${r} 0 0 1 ${f(cx + r)} ${cy}`;
+
+function zigzag(x0: number, x1: number, y: number, amp: number, period: number) {
+  const p: string[] = [];
+  for (let x = x0, i = 0; x <= x1 + 0.1; x += period / 2, i++) p.push(`${f(x)},${f(i % 2 ? y - amp : y)}`);
+  return p.join(' ');
+}
+
+const diamond = (cx: number, cy: number, rx: number, ry: number) =>
+  `${cx},${cy - ry} ${cx + rx},${cy} ${cx},${cy + ry} ${cx - rx},${cy}`;
+
+/** Small rotating group. The invisible circle pins its bounding box so it spins about (cx, cy). */
+const spin = (cls: string, cx: number, cy: number, r: number, inner: string) =>
+  `<g class="${cls}"><circle cx="${cx}" cy="${cy}" r="${r}" fill="none"/>${inner}</g>`;
+
+const pct = (n: number, of: number) => `${f((n / of) * 100)}%`;
+
+/** Full-stage layer. */
+const layer = (inner: string) => `<svg class="deco-layer" viewBox="0 0 ${W} ${H}">${inner}</svg>`;
+
+/** Square layer centred on (cx, cy); rotated as a whole element by CSS. */
+const turnLayer = (cls: string, cx: number, cy: number, r: number, inner: string) =>
+  `<svg class="deco-layer ${cls}" viewBox="${cx - r} ${cy - r} ${r * 2} ${r * 2}"` +
+  ` style="left:${pct(cx - r, W)};top:${pct(cy - r, H)};width:${pct(r * 2, W)};height:${pct(r * 2, H)}">${inner}</svg>`;
+
+// ─── Seigaiha (fan-scale) texture ─────────────────────────────
+const S = 30;
+const scales = `
+  <pattern id="deco-scales" width="${S * 2}" height="${S}" patternUnits="userSpaceOnUse">
+    <g fill="none" stroke="${INK}" stroke-width="0.6" opacity="0.06">
+      ${[1, 0.72, 0.44].map((k) => `<path d="${semi(S, S, S * k)}"/><path d="${semi(0, S / 2, S * k)}"/><path d="${semi(S * 2, S / 2, S * k)}"/>`).join('')}
+    </g>
+  </pattern>`;
+
+// ─── Sunburst + halo ──────────────────────────────────────────
+// Rays reach far enough to cover every visible crop; their ends fall
+// under the hero copy's paper gradient.
+const RAY_R = 820;
+const sunburst =
+  rays(HALO.x, HALO.y, 250, RAY_R, 48, -180, 180, `fill="${GOLD}" opacity="0.1"`) +
+  rayLines(HALO.x, HALO.y, 260, RAY_R, 96, -180, 180, `stroke="${GOLD}" stroke-width="0.45" opacity="0.2"`);
+
+const haloPoly = (n: number, r: number, rot = 0) =>
+  pts(Array.from({ length: n }, (_, k) => pt(HALO.x, HALO.y, r, rot + (360 / n) * k)));
+
+const haloRing = `
+  <g fill="none" stroke="${GOLD}" opacity="0.9">
+    <circle cx="${HALO.x}" cy="${HALO.y}" r="${HALO.r}" fill="${PAPER}" fill-opacity="0.55" stroke-width="1.5"/>
+    <circle cx="${HALO.x}" cy="${HALO.y}" r="${HALO.r - 12}" stroke-width="0.6" opacity="0.7"/>
+  </g>`;
+
+const haloDots = Array.from({ length: 72 }, (_, i) => {
+  const [x, y] = pt(HALO.x, HALO.y, HALO.r - 24, i * 5);
+  return `<circle cx="${x}" cy="${y}" r="${i % 3 ? 1.4 : 2.6}" fill="${GOLD}" opacity="0.63"/>`;
+}).join('');
+
+const haloStar = `<g fill="none" stroke="${GOLD}" opacity="0.9">${[0, 22.5, 45, 67.5]
+  .map((rot) => `<polygon points="${haloPoly(4, HALO.r - 40, rot + 45)}" stroke-width="0.7" opacity="0.55"/>`)
+  .join('')}</g>`;
+
+const haloCorona = rays(HALO.x, HALO.y, HALO.r * 0.42, HALO.r * 0.6 - 10, 48, -180, 180, `fill="${GOLD}" opacity="0.32"`);
+
+const haloFront = `
+  <g fill="none" stroke="${GOLD}" opacity="0.9">
+    <polygon points="${haloPoly(8, HALO.r * 0.6, 22.5)}" stroke-width="1.1" opacity="0.8"/>
+    <polygon points="${haloPoly(8, HALO.r * 0.6 - 8, 22.5)}" stroke-width="0.5" opacity="0.6"/>
+    <circle cx="${HALO.x}" cy="${HALO.y}" r="${HALO.r * 0.42}" stroke-width="0.8" opacity="0.7"/>
+  </g>
+  <circle class="deco-sun" cx="${HALO.x}" cy="${HALO.y}" r="${HALO.r * 0.3}" fill="${GOLD}" opacity="0.5"/>`;
+
+// ─── Chrysler tower ───────────────────────────────────────────
+/** Arch tiers drawn top→bottom; triangular windows fill each visible crescent. */
+function crown(cx: number, cy0: number, r0: number, tiers: number, dy: number, dr: number) {
+  let s = '';
+  for (let t = tiers - 1; t >= 0; t--) {
+    const r = r0 - t * dr;
+    const cy = cy0 - t * dy;
+    s += `<path d="M${f(cx - r)} ${cy + dy + 2} V${cy} A${r} ${r} 0 0 1 ${f(cx + r)} ${cy} V${cy + dy + 2} Z" fill="${INK}"/>`;
+    s += `<path d="${semi(cx, cy, r - 2)}" fill="none" stroke="${GOLD}" stroke-width="1.1" opacity="0.8"/>`;
+    if (t === tiers - 1) continue;
+    const n = 9 - Math.min(t, 4);
+    for (let i = 0; i < n; i++) {
+      const a = -180 + (180 / n) * (i + 0.5);
+      const band = dr + dy * Math.sin(rad(-a));
+      const half = (180 / n) * 0.3;
+      // Light-up wave climbs tier by tier, fanning out from each arch's centre
+      const delay = (t * 0.28 + Math.abs(i - (n - 1) / 2) * 0.05).toFixed(2);
+      s += `<polygon class="deco-win" style="--d:${delay}s" points="${pts([pt(cx, cy, r - 6, a - half), pt(cx, cy, r - 6, a + half), pt(cx, cy, r - 6 - band * 0.85, a)])}" fill="${GOLD}" opacity="0.85"/>`;
+    }
+  }
+  return s;
+}
+
+function chrysler(cx: number, base = H) {
+  const r0 = 88, tiers = 6, cy0 = 600, dy = 38, dr = 13;
+  const topArch = cy0 - (tiers - 1) * dy - (r0 - (tiers - 1) * dr);
+  const tipY = topArch - 210;
+  let s = `<g opacity="0.92">`;
+  s += `<polygon points="${cx},${tipY} ${cx - 6},${topArch + 6} ${cx + 6},${topArch + 6}" fill="${INK}"/>`;
+  s += crown(cx, cy0, r0, tiers, dy, dr);
+  // Wedding-cake setbacks with zigzag friezes
+  for (const [w, y] of [[r0 * 2, cy0 + dy], [r0 * 2 + 40, cy0 + dy + 60], [r0 * 2 + 90, cy0 + dy + 150]]) {
+    s += `<rect x="${cx - w / 2}" y="${y}" width="${w}" height="${base - y}" fill="${INK}"/>`;
+    s += `<polyline points="${zigzag(cx - w / 2 + 6, cx + w / 2 - 6, y + 14, 7, 14)}" fill="none" stroke="${GOLD}" stroke-width="0.9" opacity="0.55"/>`;
+  }
+  for (let k = -3; k <= 3; k++) {
+    s += `<line x1="${cx + k * 20}" y1="${cy0 + dy + 34}" x2="${cx + k * 20}" y2="${base}" stroke="${GOLD}" stroke-width="${k === 0 ? 1.2 : 0.6}" opacity="0.35"/>`;
+  }
+  for (const sx of [-1, 1]) {
+    const x = cx + sx * (r0 + 4);
+    s += `<polygon points="${x},${cy0 + dy - 2} ${x + sx * 22},${cy0 + dy + 10} ${x},${cy0 + dy + 18}" fill="${GOLD}" opacity="0.7"/>`;
+  }
+  s += '</g>';
+  // Four-point glint at the needle tip
+  const glint: P[] = [
+    [cx, tipY - 22], [cx + 2.2, tipY - 2.2], [cx + 16, tipY], [cx + 2.2, tipY + 2.2],
+    [cx, tipY + 22], [cx - 2.2, tipY + 2.2], [cx - 16, tipY], [cx - 2.2, tipY - 2.2],
+  ];
+  s += `<g class="deco-glint"><circle cx="${cx}" cy="${tipY}" r="9" fill="#f6c453" opacity="0.35"/><polygon points="${pts(glint)}" fill="#f6c453"/></g>`;
+  return s;
+}
+
+// ─── Flanking towers ──────────────────────────────────────────
+function fanTower(cx: number, top: number, w: number) {
+  const fanR = w * 0.62, fy = top + fanR;
+  let s = `<g opacity="0.45">`;
+  s += `<rect x="${cx - 1.5}" y="${top - 70}" width="3" height="80" fill="${INK}"/>`;
+  s += `<path d="${semi(cx, fy, fanR)} Z" fill="${INK}"/>`;
+  s += rayLines(cx, fy, 8, fanR - 4, 10, -180, 0, `stroke="${GOLD}" stroke-width="1" opacity="0.75"`);
+  s += `<path d="${semi(cx, fy, fanR * 0.55)}" fill="none" stroke="${GOLD}" stroke-width="0.8" opacity="0.6"/>`;
+  s += `<path d="${semi(cx, fy, 10)} Z" fill="${GOLD}" opacity="0.9"/>`;
+  s += `<rect x="${cx - w * 0.625}" y="${fy}" width="${w * 1.25}" height="16" fill="${INK}"/>`;
+  s += `<rect x="${cx - w * 0.725}" y="${fy + 16}" width="${w * 1.45}" height="14" fill="${INK}"/>`;
+  s += `<rect x="${cx - w / 2}" y="${fy + 30}" width="${w}" height="${H - fy - 30}" fill="${INK}"/>`;
+  s += `<rect x="${cx - w / 2 - 16}" y="${fy + 150}" width="${w + 32}" height="${H - fy - 150}" fill="${INK}"/>`;
+  for (let i = 0; i < 5; i++) {
+    const y = fy + 58 + i * 26;
+    s += i % 2
+      ? `<circle cx="${cx}" cy="${y}" r="4" fill="${GOLD}" opacity="0.65"/>`
+      : `<polygon points="${diamond(cx, y, 6, 10)}" fill="${GOLD}" opacity="0.65"/>`;
+  }
+  for (const k of [-1, 1]) {
+    s += `<line x1="${cx + k * (w / 2 - 8)}" y1="${fy + 40}" x2="${cx + k * (w / 2 - 8)}" y2="${H}" stroke="${GOLD}" stroke-width="0.7" opacity="0.4"/>`;
+  }
+  return s + '</g>';
+}
+
+function lanternTower(cx: number, top: number, w: number) {
+  const ly = top + 60, R = w * 0.42;
+  const oct = (r: number) => pts(Array.from({ length: 8 }, (_, k) => pt(cx, ly, r, 22.5 + k * 45)));
+  let s = `<g opacity="0.55">`;
+  for (let i = 0; i < 4; i++) {
+    const ww = 8 + i * 10;
+    s += `<rect x="${cx - ww / 2}" y="${top - 6 + i * 9}" width="${ww}" height="10" fill="${INK}"/>`;
+  }
+  s += `<rect x="${cx - 1}" y="${top - 46}" width="2" height="42" fill="${INK}"/>`;
+  s += `<polygon points="${oct(R)}" fill="${INK}"/>`;
+  s += `<polygon points="${oct(R - 6)}" fill="none" stroke="${GOLD}" stroke-width="0.9" opacity="0.7"/>`;
+  s += `<circle cx="${cx}" cy="${ly}" r="${R * 0.42}" fill="${GOLD}" opacity="0.75"/>`;
+  s += spin('deco-spin', cx, ly, R - 8, rayLines(cx, ly, R * 0.42, R - 8, 16, 0, 360, `stroke="${GOLD}" stroke-width="0.8" opacity="0.65"`));
+  const sy = ly + R - 4;
+  s += `<rect x="${cx - w / 2 + 6}" y="${sy}" width="${w - 12}" height="${H - sy}" fill="${INK}"/>`;
+  s += `<rect x="${cx - w / 2 - 6}" y="${sy + 60}" width="${w + 12}" height="${H - sy - 60}" fill="${INK}"/>`;
+  s += `<rect x="${cx - w / 2 - 20}" y="${sy + 170}" width="${w + 40}" height="${H - sy - 170}" fill="${INK}"/>`;
+  for (let i = 0; i < 4; i++) {
+    s += `<polyline points="${cx - w / 2 + 14},${sy + 18 + i * 10} ${cx},${sy + 8 + i * 10} ${cx + w / 2 - 14},${sy + 18 + i * 10}" fill="none" stroke="${GOLD}" stroke-width="0.9" opacity="0.6"/>`;
+  }
+  for (let k = -2; k <= 2; k++) {
+    s += `<line x1="${cx + k * 9}" y1="${sy + 70}" x2="${cx + k * 9}" y2="${H}" stroke="${GOLD}" stroke-width="0.6" opacity="0.35"/>`;
+  }
+  return s + '</g>';
+}
+
+// ─── Frieze, frame, corners ───────────────────────────────────
+const frieze = `
+  <rect x="0" y="842" width="${W}" height="58" fill="${INK}" opacity="0.08"/>
+  <polyline points="${zigzag(0, W, 856, 10, 20)}" fill="none" stroke="${GOLD}" stroke-width="1" opacity="0.55"/>
+  ${Array.from({ length: Math.ceil(W / 40) }, (_, i) => `<path d="${semi(i * 40 + 20, 890, 14)}" fill="none" stroke="${GOLD}" stroke-width="0.8" opacity="0.4"/><circle cx="${i * 40 + 20}" cy="884" r="1.6" fill="${GOLD}" opacity="0.5"/>`).join('')}
+  <line x1="0" y1="842" x2="${W}" y2="842" stroke="${GOLD}" stroke-width="1" opacity="0.5"/>
+  <line x1="0" y1="866" x2="${W}" y2="866" stroke="${GOLD}" stroke-width="0.5" opacity="0.4"/>`;
+
+const frame = `
+  <g fill="none" stroke="${GOLD}" opacity="0.6">
+    <rect x="22" y="82" width="${W - 44}" height="${H - 104}" stroke-width="0.8" opacity="0.6"/>
+    <rect x="30" y="90" width="${W - 60}" height="${H - 120}" stroke-width="0.35" opacity="0.5"/>
+  </g>`;
+
+// Stepped bracket + quarter fan, drawn top-left at the origin and mirrored
+const corner = `
+  <polyline points="0,70 0,0 70,0" stroke-width="1.6"/>
+  <polyline points="10,44 10,10 44,10" stroke-width="0.8"/>
+  <path d="M10 40 A30 30 0 0 0 40 10" stroke-width="0.7"/>
+  ${rayLines(10, 10, 4, 28, 4, 0, 90, 'stroke-width="0.5"')}
+  <polygon points="${diamond(56, 22, 4, 7)}" fill="${GOLD}" stroke="none"/>
+  <polygon points="${diamond(22, 56, 7, 4)}" fill="${GOLD}" stroke="none"/>`;
+const corners = [[22, 82, 1, 1], [W - 22, 82, -1, 1], [22, H - 22, 1, -1], [W - 22, H - 22, -1, -1]]
+  .map(([x, y, sx, sy]) => `<g transform="translate(${x} ${y}) scale(${sx} ${sy})">${corner}</g>`)
+  .join('');
+
+const stage = [
+  layer(`<defs>${scales}</defs>
+    <rect width="${W}" height="${H}" fill="${PAPER}"/>
+    <rect width="${W}" height="${H}" fill="url(#deco-scales)"/>`),
+  turnLayer('deco-rays', HALO.x, HALO.y, RAY_R, sunburst),
+  layer(haloRing),
+  turnLayer('deco-dots', HALO.x, HALO.y, HALO.r - 20, haloDots),
+  turnLayer('deco-star', HALO.x, HALO.y, HALO.r - 36, haloStar),
+  turnLayer('deco-corona', HALO.x, HALO.y, HALO.r * 0.6 - 8, haloCorona),
+  layer(`${haloFront}
+    ${lanternTower(LANTERN_X, 390, 74)}
+    ${fanTower(FAN_X, 430, 70)}
+    ${chrysler(TOWER_X)}
+    ${frieze}
+    ${frame}
+    <g fill="none" stroke="${GOLD}" stroke-linecap="square" opacity="0.6">${corners}</g>`),
+].join('');
+---
+
+<div
+  class="deco-stage"
+  style={`--tower-x: ${pct(TOWER_X, W)}`}
+  aria-hidden="true"
+  set:html={stage}
+/>

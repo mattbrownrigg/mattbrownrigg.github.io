@@ -279,16 +279,52 @@ ol, ul { list-style: none; }
   inset: 0;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  overflow: hidden;
   background: transparent;
   z-index: 0;
+  container-type: size;
 }
 
-.hero-visual > svg {
+/* Skyline stage: fixed 16:10 artboard that covers the hero (like
+   `slice`), so its stacked layers stay registered at any size */
+.deco-stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100cqw, 160cqh);
+  aspect-ratio: 1440 / 900;
+  translate: -50% -50%;
+}
+
+.deco-layer {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
+  max-width: none;
+}
+
+/* Deco skyline motion — slow celestial turn, crown lights, spire glint.
+   Rotating layers are whole elements (composited); the small in-SVG
+   pieces pivot on their own centre (see DecoSkyline.astro). */
+.deco-rays, .deco-dots, .deco-star, .deco-corona { will-change: transform; }
+
+.deco-spin, .deco-sun, .deco-glint {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.deco-rays   { animation: deco-turn 240s linear infinite; }
+.deco-dots   { animation: deco-turn 90s linear infinite; }
+.deco-star   { animation: deco-turn 120s linear infinite reverse; }
+.deco-corona { animation: deco-turn 60s linear infinite; }
+.deco-spin   { animation: deco-turn 24s linear infinite; }
+.deco-sun    { animation: deco-breathe 6s ease-in-out infinite; }
+.deco-win    { animation: deco-win 7s ease-in-out calc(1.2s + var(--d)) infinite; }
+.deco-glint  { transform: scale(0); animation: deco-glint 7s ease-in-out 2.8s infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-visual * { animation: none !important; }
 }
 
 
@@ -524,6 +560,26 @@ ol, ul { list-style: none; }
   to   { transform: scaleX(1); }
 }
 
+@keyframes deco-turn {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes deco-breathe {
+  0%, 100% { opacity: 0.45; transform: scale(1); }
+  50%      { opacity: 0.62; transform: scale(1.06); }
+}
+
+@keyframes deco-win {
+  0%, 16%, 100% { fill: #cc8800; }
+  4%, 8%        { fill: #fff4d2; }
+}
+
+@keyframes deco-glint {
+  0%, 8%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  12%          { opacity: 1; transform: scale(1.15) rotate(45deg); }
+  22%          { opacity: 0; transform: scale(0) rotate(90deg); }
+}
+
 
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    RESPONSIVE
@@ -543,6 +599,14 @@ ol, ul { list-style: none; }
       oklch(0.94 0.035 78 / 0.75) 60%,
       oklch(0.94 0.035 78 / 0) 100%
     );
+  }
+
+  /* Centre the skyline on its main tower and fade it out behind the
+     hero copy */
+  .deco-stage {
+    translate: calc(-1 * var(--tower-x)) -50%;
+    -webkit-mask-image: linear-gradient(to bottom, #000 40%, transparent 78%);
+            mask-image: linear-gradient(to bottom, #000 40%, transparent 78%);
   }
 }
 
