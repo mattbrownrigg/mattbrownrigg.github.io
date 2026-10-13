@@ -32,7 +32,10 @@ const projects = (await getCollection('projects')).sort(
             alt="Matthew Brownrigg"
             class="hero-portrait-img"
             width={400}
+            widths={[112, 208, 400]}
+            sizes="(max-width: 768px) 104px, clamp(64px, 13vw, 200px)"
             loading="eager"
+            fetchpriority="high"
           />
         </div>
         <h1 class="hero-name">
@@ -116,6 +119,8 @@ const projects = (await getCollection('projects')).sort(
             class="about-portrait"
             width={520}
             height={780}
+            widths={[120, 240, 360, 520]}
+            sizes="(max-width: 768px) clamp(100px, 28vw, 140px), clamp(180px, 20vw, 260px)"
           />
         </div>
       </div>
